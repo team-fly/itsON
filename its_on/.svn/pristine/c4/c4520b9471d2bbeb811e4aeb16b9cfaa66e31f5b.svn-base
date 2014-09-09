@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="flyapp.its_on" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo_itson"
+        android:label="IT&apos;S ON"
+        android:theme="@style/AppTheme" >
+        <activity android:name=".StartScreen" >
+        </activity>
+        <activity android:name=".ProfileHome" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ChallengeMainPage"
+            android:noHistory="true" >
+        </activity>
+        <activity android:name=".NewChallenge" >
+        </activity>
+        <activity android:name=".Registration" >
+        </activity>
+        <activity android:name=".SignInScreen" >
+        </activity>
+        <activity
+            android:name=".FriendsPage"
+            android:label="@string/title_activity_friends_page" >
+        </activity>
+    </application>
+
+</manifest>

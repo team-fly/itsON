@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="C:\Users\HLiu\Dropbox\Dev\Projects\its_on\app\build\intermediates\pre-dexed\debug\classes-0ef1226726c5a2c2c790eda363ecb0d0d48f3aa4.jar"
+        jar="C:\Users\HLiu\Dropbox\Dev\Projects\its_on\app\build\intermediates\exploded-aar\net.danlew\android.joda\2.3.4\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="ff577b415deb52d3e9d4a6c7bd6908c8f7914d3a"/>
+    <item
+        dex="C:\Users\HLiu\Dropbox\Dev\Projects\its_on\app\build\intermediates\pre-dexed\debug\classes-476f11a75a1f5674809cd60dade05dae86b0330f.jar"
+        jar="C:\Users\HLiu\Dropbox\Dev\Projects\its_on\app\build\intermediates\exploded-aar\org.lucasr.twowayview\twowayview\0.1.1\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="f4c3a1a784563dd6f014ddf8e3a173cf3f152dd8"/>
+    <item
+        dex="C:\Users\HLiu\Dropbox\Dev\Projects\its_on\app\build\intermediates\pre-dexed\debug\classes-c2a3491dc3255c4cb1f0215ca228e3f3bd642b24.jar"
+        jar="C:\Users\HLiu\Dropbox\Dev\Projects\its_on\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.2.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="74a49dde8bd90b878b98c2ecc32e4feec831f30d"/>
+    <item
+        dex="C:\Users\HLiu\Dropbox\Dev\Projects\its_on\app\build\intermediates\pre-dexed\debug\support-v4-19.0.1-c1eb082e72b38753484db63e954d2b657e845324.jar"
+        jar="C:\Users\HLiu\AppData\Local\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-v4\19.0.1\support-v4-19.0.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="587da9a481ffd341d2fa091704489b89845ddacd"/>
+
+</pre-dex-items>

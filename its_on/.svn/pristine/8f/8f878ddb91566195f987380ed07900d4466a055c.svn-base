@@ -1,0 +1,126 @@
+package flyapp.its_on;
+
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.lucasr.twowayview.TwoWayView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+//TODO: make this class
+
+/**
+ * Created by HLiu on 08/08/2014.
+ */
+public class HttpFriend {
+
+
+    private static final String TAG_SUCCESS = "success";    //string to get integer value of success
+    private static final String TAG_POSTS = "posts";    //string for retrieving POST data from php
+    private static final String TAG_MESSAGE = "message";    //key string used to retrieve JSON msgs from PHP
+
+    private String operation;
+    private String phpUrl;
+
+    private List<NameValuePair> parameters= new ArrayList<NameValuePair>();
+
+    public HttpFriend()
+    {
+
+    }
+
+    public void setUrl(String getUrl)
+    {
+        phpUrl=getUrl;
+
+    }
+
+    public void addParameters(String key, String value)
+    {
+        parameters.add(new BasicNameValuePair(key, value));
+    }
+
+
+    public class RequestProcessor extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected Boolean doInBackground(Void... arg0) {
+            int success;
+            try {
+                Log.d("request!", "starting");
+
+                JSONParser jsonParser = new JSONParser();
+
+                JSONObject json = jsonParser.makeHttpRequest(phpUrl, "POST", parameters);  //does this POST have to be here? what does it signify?
+                Log.d("Register attempt", json.toString());
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Register Successful!", json.toString());
+                    processJSONData();
+                    return true;
+
+                } else {
+                    Log.d("Register Failed!", json.toString());
+                    return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+        }
+    }
+
+    public void processJSONData() {
+
+        /*
+
+        // Instantiate JSONParser to parse JSON data
+        JSONParser jParser = new JSONParser();
+        //Retrieves an object from php file as a JSON obj
+        JSONObject json = jParser.getJSONFromUrl(FILLPRO_URL);
+        //Used to contain the data form JSON Obj as strings
+        JSONArray sqlData = null;
+
+        Challenge challenge;
+
+        try {
+
+            sqlData = json.getJSONArray(TAG_POSTS);
+
+            // looping through all posts according to the json object returned
+            for (int i = 0; i < sqlData.length(); i++) {
+
+                challenge=new Challenge(this.getApplicationContext());
+                if(challenge.loadChallengeInfo(sqlData.getJSONObject(i))) {
+                    challengeList.add(challenge);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        */
+    }
+
+}

@@ -1,0 +1,422 @@
+package flyapp.its_on;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+
+public class ProfileHome extends Activity {
+
+       //HL: class used to store display info of each challenge
+    //shows up on user profile page
+    public class chlg_Item {
+        int id;
+        String title;
+        String desc;
+        Drawable icon;
+        String updmsg;
+        String image_url;
+        Bitmap image;
+        int istodayComp;
+        //add table name into this after
+        //make this object oriented
+    }
+
+
+    private static String FILLPRO_URL;    //link to php file used to fill the Profile page with challenges
+    private static String UPDATE_URL;     //link to php file for updating a challange
+    private static String ISCOMP_URL;
+
+    private static final String TAG_SUCCESS = "success";    //string to get integer value of success
+    private static final String TAG_POSTS = "posts";    //string for retrieving POST data from php
+    private static final String TAG_POSTS2 = "posts2";
+    private static final String TAG_MESSAGE = "message";    //key string used to retrieve JSON msgs from PHP
+
+    private static final String TAG_ID = "id";      //key string used for retrieve id from POST in PHP
+    private static final String TAG_NAME = "name";  //key string used for retrieve name from POST in PHP
+    private static final String TAG_DESCRIPTION = "description";    //key string used for retrieve description from POST in PHP
+    private static final String TAG_IMGURL = "url";    //key string used for retrieve description from POST in PHP
+    private static final String TAG_ISCOMP="iscomplete";    //key string used for retrieve if challenge has been completed for today
+
+
+    List<chlg_Item> chlgitem_list;
+
+    int id_selectedChlg=0; //find a better way to do this later
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile_home);
+
+        //sets Action Bar title to "profile home"
+        setTitle("Profile Home");
+
+        //sets the value of the links to PHP files
+        FILLPRO_URL = getResources().getString(R.string.ipaddress)+ "fillprofile.php";
+        UPDATE_URL=getResources().getString(R.string.ipaddress)+ "update.php";
+        ISCOMP_URL=getResources().getString(R.string.ipaddress) +"istodaycomplete.php";
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //loading the comments via AsyncTask
+        new LoadChallenges().execute();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.profile_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.action_addchallenge:
+                Intent nextScreen = new Intent(getApplicationContext(), NewChallenge.class);
+                startActivityForResult(nextScreen,1);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
+
+    public class UpdateChallenge extends AsyncTask<String, String, String > {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected String doInBackground(String... args) {
+            //we will develop this method in version 2
+            int success;
+            try {
+                // Building Parameters
+                //HL: do these correspond with the form variable names?
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                String temp="hdawg"+"_"+id_selectedChlg;
+                params.add(new BasicNameValuePair("tablename", temp));
+
+                Log.d("request!", "starting");
+                // getting product details by making HTTP request
+
+                JSONParser jsonParser = new JSONParser();
+
+                JSONObject json = jsonParser.makeHttpRequest(UPDATE_URL, "POST", params);
+                // check your log for json response
+                Log.d("Update Attempt", json.toString());
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Update Successful!", json.toString());
+                    return json.getString(TAG_MESSAGE);
+
+                } else {
+                    Log.d("Update Failed!", json.toString());
+                    return json.getString(TAG_MESSAGE);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return "";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //looking into changing boolean to string
+            if (result != null){
+                Toast.makeText(ProfileHome.this, result, Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+
+    public class LoadChallenges extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected Boolean doInBackground(Void... arg0) {
+            //we will develop this method in version 2
+            int success;
+            try {
+                // Building Parameters
+                //HL: do these correspond with the form variable names?
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("username", "hdawg")); //make it dynamically loaded later
+
+                Log.d("request!", "starting");
+                // getting product details by making HTTP request
+
+                JSONParser jsonParser = new JSONParser();
+
+                JSONObject json = jsonParser.makeHttpRequest(FILLPRO_URL, "POST", params);
+                // check your log for json response
+                Log.d("Register attempt", json.toString());
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Register Successful!", json.toString());
+                    updateJSONdata();
+                    return true;
+
+                } else {
+                    Log.d("Register Failed!", json.toString());
+                    return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            //looking into changing boolean to string
+            super.onPostExecute(result);
+            //we will develop this method in version 2
+            //
+            updateList();
+        }
+    }
+
+
+    //private JSONArray mComments = null;
+
+    public void updateJSONdata() {
+
+        // Instantiate JSONParser to parse JSON data
+        JSONParser jParser = new JSONParser();
+        //Retrieves an object from php file as a JSON obj
+        JSONObject json = jParser.getJSONFromUrl(FILLPRO_URL);
+        //Used to contain the data form JSON Obj as strings
+        JSONArray mComments = null;
+
+        //set up the List for Header and Hashmap for the Child items
+        chlg_Item chlg;
+        chlgitem_list = new ArrayList<chlg_Item>();
+
+
+        try {
+
+            //retrieves
+            mComments = json.getJSONArray(TAG_POSTS);
+
+            // looping through all posts according to the json object returned
+            for (int i = 0; i < mComments.length(); i++) {
+                JSONObject c = mComments.getJSONObject(i);
+
+                chlg= new chlg_Item();
+
+                chlg.id =Integer.parseInt(c.getString(TAG_ID)); //see if this will work
+                chlg.title = c.getString(TAG_NAME);
+                chlg.desc = c.getString(TAG_DESCRIPTION);
+                chlg.image_url=c.getString(TAG_IMGURL);
+                chlg.image=loadImageFromUrl(c.getString(TAG_IMGURL));
+                chlg.istodayComp=Integer.parseInt(c.getString(TAG_ISCOMP));
+
+                //temporarily set the icon to launcher
+                chlg.icon=getResources().getDrawable(R.drawable.ic_launcher);
+                chlgitem_list.add(chlg);
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    ChallengeAdapter challengeAdapter;
+    //Function for Updating the Expandable List View with the information retrieve form SQL
+    private void updateList() {
+
+        challengeAdapter = new ChallengeAdapter();
+
+        ListView challengesList = (ListView) findViewById(R.id.lv_challenges);
+        challengesList.setAdapter(challengeAdapter);
+
+        challengesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+
+                chlg_Item challenge = challengeAdapter.getChallenge(arg2);
+
+                //handle click events after
+
+                //Toast.makeText(ListViewWithBaseAdapter.this, chapter.chapterName, Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
+
+
+    public class ChallengeAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return chlgitem_list.size();
+        }
+
+        @Override
+        public chlg_Item getItem(int arg0) {
+            // TODO Auto-generated method stub
+            return chlgitem_list.get(arg0);
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            // TODO Auto-generated method stub
+            return arg0;
+        }
+
+        @Override
+        public View getView(int arg0, View arg1, ViewGroup arg2) {
+
+            if(arg1==null)
+            {
+                LayoutInflater inflater = (LayoutInflater) ProfileHome.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                arg1 = inflater.inflate(R.layout.view_challengeprofile, arg2,false);
+            }
+
+            TextView challengeName = (TextView)arg1.findViewById(R.id.tv_profileChlgTitle);
+            final chlg_Item challenge = chlgitem_list.get(arg0);
+
+            challengeName.setText(challenge.title);
+            final ImageView check=(ImageView)arg1.findViewById(R.id.iv_update);
+
+            if(challenge.istodayComp==1)
+                check.setImageDrawable(getResources().getDrawable(R.drawable.icon_updated));
+            else
+                check.setImageDrawable(getResources().getDrawable(R.drawable.icon_update));
+
+            ImageView challengeCover=(ImageView)arg1.findViewById(R.id.iv_profileChlgCover);
+            challengeCover.setImageBitmap(challenge.image);
+
+            challengeCover.setOnClickListener(new View.OnClickListener() {
+                                                  @Override
+                    public void onClick(View v) {
+                          Intent nextScreen = new Intent(getApplicationContext(), ChallengeMainPage.class);
+                          nextScreen.putExtra("id",challenge.id);
+                          startActivity(nextScreen);
+                    }
+                }
+
+            );
+
+
+
+            check.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        check.setImageDrawable(getResources().getDrawable(R.drawable.icon_updated));
+                        challenge.istodayComp=1; //so that the imageview does not reset itself due to the if statement above
+                        //childItem.updmsg=editTextKeywordToBlock.getText().toString();
+                        id_selectedChlg=challenge.id;
+                        new UpdateChallenge().execute();
+
+                        Toast.makeText(ProfileHome.this, "Challenge Updated", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            );
+
+            return arg1;
+        }
+
+        public chlg_Item getChallenge(int position)
+        {
+            return chlgitem_list.get(position);
+        }
+
+    }
+
+    private static final int BUFFER_IO_SIZE = 8000;
+
+    private Bitmap loadImageFromUrl(final String url) {
+        try {
+            BufferedInputStream bis = new BufferedInputStream(new URL(url).openStream(), BUFFER_IO_SIZE);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            BufferedOutputStream bos = new BufferedOutputStream(baos, BUFFER_IO_SIZE);
+            copy(bis, bos);
+            bos.flush();
+            return  BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.size());
+        } catch (IOException e) {
+            // handle it properly
+            return null;
+        }
+    }
+
+    private void copy(final InputStream bis, final OutputStream baos) throws IOException {
+        byte[] buf = new byte[256];
+        int l;
+        while ((l = bis.read(buf)) >= 0) baos.write(buf, 0, l);
+    }
+
+
+}

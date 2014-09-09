@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ProfileHome" >
+
+    <!-- Location Found -->
+    <item android:id="@+id/action_addchallenge"
+        android:icon="@drawable/ic_add"
+        android:title="add_challenge"
+        android:showAsAction="always" />
+</menu>

@@ -1,0 +1,187 @@
+package flyapp.its_on;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * Created by HLiu on 05/08/2014.
+ */
+public class Challenge {
+
+    private static String UPDATE_URL;     //link to php file for updating a challange
+
+    private static final String TAG_SUCCESS = "success";    //string to get integer value of success
+    private static final String TAG_POSTS = "posts";    //string for retrieving POST data from php
+    private static final String TAG_MESSAGE = "message";    //key string used to retrieve JSON msgs from PHP
+
+    private static final String TAG_ID = "id";      //key string used for retrieve id from POST in PHP
+    private static final String TAG_NAME = "name";  //key string used for retrieve name from POST in PHP
+    private static final String TAG_DESCRIPTION = "description";    //key string used for retrieve description from POST in PHP
+    private static final String TAG_IMGURL = "url";    //key string used for retrieve description from POST in PHP
+    private static final String TAG_ISCOMP="iscomplete";    //key string used for retrieve if challenge has been completed for today
+    private static final String TAG_TABLENAME = "tablename";
+
+    private static final int BUFFER_IO_SIZE = 8000;
+
+    private int ID;
+    private String NAME;
+    private String DESCRIPTION;
+    private Bitmap COVER;
+    private Boolean ISTODAYCOMPLETE;
+    private String TABLENAME;
+    private String USERNAME;
+
+    SessionManager userSession;
+
+    private Context context;
+
+    // constructor
+    public Challenge(Context arg0) {
+        context=arg0;
+        UPDATE_URL= context.getResources().getString(R.string.ipaddress) + "update.php";
+        userSession = new SessionManager(context);
+
+    }
+
+    public boolean loadChallengeInfo(JSONObject data) {
+        try {
+
+            ID =Integer.parseInt(data.getString(TAG_ID));
+            NAME = data.getString(TAG_NAME);
+            DESCRIPTION = data.getString(TAG_DESCRIPTION);
+            COVER=loadImageFromUrl(data.getString(TAG_IMGURL));
+
+            HashMap<String, String> user = userSession.getUserName();
+            USERNAME = user.get(SessionManager.KEY_NAME);
+
+            TABLENAME=USERNAME+"_"+data.getString(TAG_ID);
+
+            if(Integer.parseInt(data.getString(TAG_ISCOMP))==1)
+                ISTODAYCOMPLETE=true;
+            else
+                ISTODAYCOMPLETE=false;
+
+            return true;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public int getId() { return ID;}
+
+    public String getName() { return NAME; }
+
+    public String getTableName() { return TABLENAME; }
+
+    public String getDescription() { return DESCRIPTION; }
+
+    public Boolean checkIfTodayComplete() { return ISTODAYCOMPLETE;}
+
+    public Bitmap getCoverBitmap() { return COVER;}
+
+    public void updateToday()
+    {
+        new UpdateChallenge().execute();
+    }
+
+    private class UpdateChallenge extends AsyncTask<String, String, String > {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected String doInBackground(String... args) {
+            //we will develop this method in version 2
+            int success;
+            try {
+                // Building Parameters
+                //HL: do these correspond with the form variable names?
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair(TAG_TABLENAME, TABLENAME));
+
+                Log.d("request!", "starting");
+                // getting product details by making HTTP request
+
+                JSONParser jsonParser = new JSONParser();
+
+                JSONObject json = jsonParser.makeHttpRequest(UPDATE_URL, "POST", params);
+                // check your log for json response
+                Log.d("Update Attempt", json.toString());
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Update Successful!", json.toString());
+                    return json.getString(TAG_MESSAGE);
+
+                } else {
+                    Log.d("Update Failed!", json.toString());
+                    return json.getString(TAG_MESSAGE);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return "";
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //looking into changing boolean to string
+            if (result != null){
+
+                ISTODAYCOMPLETE=true;
+                //TODO: figure out a way to pass result back. maybe try passing context
+                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    private Bitmap loadImageFromUrl(final String url) {
+        try {
+            BufferedInputStream bis = new BufferedInputStream(new URL(url).openStream(), BUFFER_IO_SIZE);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            BufferedOutputStream bos = new BufferedOutputStream(baos, BUFFER_IO_SIZE);
+            copy(bis, bos);
+            bos.flush();
+            return  BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.size());
+        } catch (IOException e) {
+            // handle it properly
+            return null;
+        }
+    }
+
+    private void copy(final InputStream bis, final OutputStream baos) throws IOException {
+        byte[] buf = new byte[256];
+        int l;
+        while ((l = bis.read(buf)) >= 0) baos.write(buf, 0, l);
+    }
+
+
+}

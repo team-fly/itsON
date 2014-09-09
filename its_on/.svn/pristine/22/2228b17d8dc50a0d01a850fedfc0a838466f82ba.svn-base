@@ -1,0 +1,126 @@
+package flyapp.its_on;
+
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+
+public class SignInScreen extends Activity {
+
+    boolean passfail=false;
+    private static String LOGIN_URL;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_in_screen);
+        LOGIN_URL = getResources().getString(R.string.ipaddress)+"login.php";
+
+        ActionBar bar = getActionBar();
+        bar.hide();
+    }
+
+
+    public void SignIn(View v)
+    {
+        new AttemptLogin().execute();
+    }
+
+    private EditText user, pass;
+
+    // url to get all products list
+
+    private static final String TAG_MESSAGE = "message";
+    private static final String TAG_SUCCESS = "success";
+
+    JSONParser jsonParser = new JSONParser();
+
+    class AttemptLogin extends AsyncTask<String, String, String> {
+
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        boolean failure = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            // TODO Auto-generated method stub
+            // Check for success tag
+            int success;
+
+            user = (EditText)findViewById(R.id.et_signinUsername);
+            pass = (EditText)findViewById(R.id.et_signinPassword);
+
+            String username = user.getText().toString();
+            String password = pass.getText().toString();
+
+            try {
+                // Building Parameters
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("username", username));
+                params.add(new BasicNameValuePair("password", password));
+
+                Log.d("request!", "starting");
+                // getting product details by making HTTP request
+                JSONObject json = jsonParser.makeHttpRequest(LOGIN_URL, "POST", params);
+
+                // check your log for json response
+                Log.d("Login attempt", json.toString());
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Login Successful!", json.toString());
+
+                    Intent nextScreen = new Intent(getApplicationContext(), ProfileHome.class);
+                    finish();
+                    startActivity(nextScreen);
+                    return json.getString(TAG_MESSAGE);
+                }else{
+                    Log.d("Login Failure!", json.toString());
+                    //Toast.makeText(SignInScreen.this, "Login Fail", Toast.LENGTH_LONG).show();
+                    return json.getString(TAG_MESSAGE);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+
+            if (file_url != null){
+                Toast.makeText(SignInScreen.this, file_url, Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+
+}

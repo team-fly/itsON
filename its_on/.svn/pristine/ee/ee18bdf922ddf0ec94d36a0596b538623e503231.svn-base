@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="flyapp.its_on" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo_itson"
+        android:label="IT&apos;S ON"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".ActivityStartScreen"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ActivityProfileHome"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ActivityChallengeMainPage"
+            android:label=""
+            android:noHistory="true" >
+        </activity>
+        <activity
+            android:name=".ActivityNewChallenge"
+            android:label=""
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ActivityRegistration"
+            android:label=""
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ActivitySignInScreen"
+            android:label=""
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ActivityFriendsPage"
+            android:label=""
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ActivityFriendRequest"
+            android:label=""
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ActivityChallengeRequests"
+            android:label=""
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ActivityArchive"
+            android:label=""
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <service android:name=".HttpCallIntentService" />
+
+        <activity
+            android:name=".ProfileSettings"
+            android:label="@string/title_activity_profile_settings" >
+        </activity>
+    </application>
+
+</manifest>

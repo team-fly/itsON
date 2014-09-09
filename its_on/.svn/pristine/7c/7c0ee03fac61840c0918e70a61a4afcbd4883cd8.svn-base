@@ -1,0 +1,257 @@
+package flyapp.its_on;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+
+public class ProfileHome extends Activity {
+
+    private static String FILLPRO_URL;    //link to php file used to fill the Profile page with challenges
+
+    private static final String TAG_SUCCESS = "success";    //string to get integer value of success
+    private static final String TAG_POSTS = "posts";    //string for retrieving POST data from php
+    private static final String TAG_MESSAGE = "message";    //key string used to retrieve JSON msgs from PHP
+
+    public static String USERNAME;
+
+    private List<Challenge> challengeList;
+
+    public static Challenge selectedChallenge;
+    private ChallengeAdapter challengeAdapter;
+
+    SessionManager userSession;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile_home);
+
+        //sets Action Bar title to "profile home"
+        setTitle("");
+
+        //sets the value of the links to PHP files
+        FILLPRO_URL = getResources().getString(R.string.ipaddress)+ "fillprofile.php";
+
+
+        // Session class instance
+        userSession = new SessionManager(getApplicationContext());
+        userSession.checkLogin(); //checks if user is logged in. if not, directs them to login page
+        // get user data from session
+        HashMap<String, String> user = userSession.getUserName();
+        USERNAME = user.get(SessionManager.KEY_NAME);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        challengeList=new ArrayList<Challenge>();
+        //loading the comments via AsyncTask
+        new LoadChallengeList().execute();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.profile_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_addchallenge:
+                Intent addChallengeScreen = new Intent(getApplicationContext(), NewChallenge.class);
+                startActivityForResult(addChallengeScreen,1);
+                return true;
+            case R.id.action_logout:
+                userSession.logoutUser();
+                Intent loginScreen = new Intent(getApplicationContext(), SignInScreen.class);
+                startActivity(loginScreen);
+                return true;
+            case R.id.action_addFriend:
+                Intent friendScreen = new Intent(getApplicationContext(), FriendsPage.class);
+                startActivity(friendScreen);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public class LoadChallengeList extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected Boolean doInBackground(Void... arg0) {
+            //TODO: make this one function that can be used by everyone
+            int success;
+            try {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("username", USERNAME)); //make it dynamically loaded later
+
+                Log.d("request!", "starting");
+
+                JSONParser jsonParser = new JSONParser();
+
+                JSONObject json = jsonParser.makeHttpRequest(FILLPRO_URL, "POST", params);
+                // check your log for json response
+                Log.d("Register attempt", json.toString());
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Register Successful!", json.toString());
+                    populateChallengesFromJSON();
+                    return true;
+
+                } else {
+                    Log.d("Register Failed!", json.toString());
+                    return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            challengeAdapter = new ChallengeAdapter();
+
+            ListView challengesListview = (ListView) findViewById(R.id.lv_challenges);
+            challengesListview.setAdapter(challengeAdapter);
+        }
+    }
+
+    public void populateChallengesFromJSON() {
+
+        // Instantiate JSONParser to parse JSON data
+        JSONParser jParser = new JSONParser();
+        //Retrieves an object from php file as a JSON obj
+        JSONObject json = jParser.getJSONFromUrl(FILLPRO_URL);
+        //Used to contain the data form JSON Obj as strings
+        JSONArray sqlData = null;
+
+        Challenge challenge;
+
+        try {
+
+            sqlData = json.getJSONArray(TAG_POSTS);
+
+            // looping through all posts according to the json object returned
+            for (int i = 0; i < sqlData.length(); i++) {
+
+                challenge=new Challenge(this.getApplicationContext());
+                if(challenge.loadChallengeInfo(sqlData.getJSONObject(i))) {
+                    challengeList.add(challenge);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class ChallengeAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return challengeList.size();
+        }
+
+        @Override
+        public Challenge getItem(int arg0) {
+            return challengeList.get(arg0);
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            return arg0;
+        }
+
+        @Override
+        public View getView(int arg0, View arg1, ViewGroup arg2) {
+
+            if(arg1==null)
+            {
+                LayoutInflater inflater = (LayoutInflater) ProfileHome.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                arg1 = inflater.inflate(R.layout.view_challengeprofile, arg2,false);
+            }
+
+            final Challenge challenge = challengeList.get(arg0);
+
+            TextView challengeName = (TextView)arg1.findViewById(R.id.tv_profileChlgTitle);
+            challengeName.setText(challenge.getName());
+
+            final ImageView check=(ImageView)arg1.findViewById(R.id.iv_update);
+            if(challenge.checkIfTodayComplete())
+                check.setImageDrawable(getResources().getDrawable(R.drawable.icon_updated));
+            else
+                check.setImageDrawable(getResources().getDrawable(R.drawable.icon_update));
+
+            ImageView challengeCover=(ImageView)arg1.findViewById(R.id.iv_profileChlgCover);
+            challengeCover.setImageBitmap(challenge.getCoverBitmap());
+
+            challengeCover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                          selectedChallenge=challenge;
+                          Intent nextScreen = new Intent(getApplicationContext(), ChallengeMainPage.class);
+                          startActivity(nextScreen);
+                    }
+                }
+            );
+
+            check.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        check.setImageDrawable(getResources().getDrawable(R.drawable.icon_updated));
+                        challenge.updateToday();
+
+                        Toast.makeText(ProfileHome.this, "Challenge Updated", Toast.LENGTH_SHORT).show();
+                        //TODO: change this, not accurate based on realtime
+                    }
+                }
+            );
+            return arg1;
+        }
+
+        public Challenge getChallenge(int position)
+        {
+            return challengeList.get(position);
+        }
+
+    }
+
+
+}

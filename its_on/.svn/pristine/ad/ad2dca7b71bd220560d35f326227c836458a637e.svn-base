@@ -1,0 +1,388 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <View style="@style/DividerHor"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="180dp"
+            android:layout_height="120dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="10dp"
+            android:background="#4fa5d5"
+            tools:context="flyapp.its_on.ChallengeMainPage">
+
+            <ImageView
+                android:id="@+id/iv_chlgMainPageDp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/img_hdawgdp"
+                android:paddingRight="10dp"
+                android:layout_alignParentLeft="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_chlgMainPageUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HDAWG"
+                android:textSize="15dp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:layout_toRightOf="@+id/iv_chlgMainPageDp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LV 12"
+                android:textSize="12dp"
+                android:textColor="#ffffff"
+                android:paddingLeft="5dp"
+                android:layout_toRightOf="@+id/tv_chlgMainPageUserName"
+                android:layout_alignBottom="@+id/tv_chlgMainPageUserName"
+                android:paddingBottom="2dp"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="&quot;it is an impossible achievement to not do this &quot;"
+                android:textSize="12dp"
+                android:textStyle="italic"
+                android:textColor="#ffffff"
+                android:layout_toRightOf="@+id/iv_chlgMainPageDp"
+                android:layout_below="@+id/tv_chlgMainPageUserName"
+                />
+
+        </RelativeLayout>
+
+        <View style="@style/DividerVert"/>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="180dip"
+            android:layout_height="120dip"
+            android:background="#4fa5d5"
+            android:paddingTop="10dp"
+            android:paddingRight="5dp"
+            tools:context="flyapp.its_on.ChallengeMainPage">
+
+
+            <ImageView
+                android:id="@+id/iv_chlg2ndPageDp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/img_xiaoxiaodp"
+                android:paddingLeft="10dp"
+                android:layout_alignParentRight="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_chlg2ndPageUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XIAO"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:layout_toLeftOf="@+id/tv_chlg2ndPageLevel"
+                />
+
+            <TextView
+                android:id="@+id/tv_chlg2ndPageLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:text="LV 12"
+                android:textSize="12dp"
+                android:paddingLeft="5dp"
+                android:layout_toLeftOf="@+id/iv_chlg2ndPageDp"
+                android:layout_alignBottom="@+id/tv_chlg2ndPageUserName"
+                android:paddingBottom="2dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="&quot;it is an impossible achievement to not do this &quot;"
+                android:textSize="12dp"
+                android:textStyle="italic"
+                android:gravity="right"
+                android:textColor="#ffffff"
+                android:layout_toLeftOf="@+id/iv_chlg2ndPageDp"
+                android:layout_below="@+id/tv_chlg2ndPageUserName"
+                />
+        </RelativeLayout>
+    
+    </LinearLayout>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:paddingBottom="40dp">
+
+
+        <LinearLayout
+
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/lo_hdawgStats"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingLeft="20dp"
+            android:layout_alignParentLeft="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="It's ON"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="12"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="5"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="3"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="07-15-14"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="07-28-14"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="Status"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="Day #"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="Days Done"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="Days Left"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="Start Date"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="End Date"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_alignParentRight="true"
+            android:paddingRight="20dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="It's ON"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="12"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="5"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="3"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="07-15-14"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4fa5d5"
+                android:text="07-28-14"
+                android:textSize="18dp"
+                android:paddingBottom="5dp"
+                />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#4fa5d5"
+        android:layout_gravity="center_vertical"
+        >
+
+        <ImageView
+            android:layout_width="175dp"
+            android:layout_height="130dp"
+            android:src="@drawable/henry_fly"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            />
+
+        <View style="@style/DividerVert"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:layout_width="175dp"
+            android:layout_height="130dp"
+            android:src="@drawable/xiao_fly"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+
+</LinearLayout>
+<!-- From: file:/C:/Users/HL/AndroidStudioProjects/Its_On/app/src/main/res/layout/activity_challenge_main_page.xml -->

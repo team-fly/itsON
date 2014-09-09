@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:background="#4fa5d5"
+    tools:context="flyapp.its_on.Registration">
+
+
+
+     <EditText
+        android:layout_gravity="center_horizontal"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:textSize="20sp"
+        android:id="@+id/et_regUsername"
+        android:hint="username"
+        android:gravity="center"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="#ffffff" />
+
+    <EditText
+        android:layout_gravity="center_horizontal"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:textSize="20sp"
+        android:id="@+id/et_regPassword"
+        android:hint="password"
+        android:gravity="center"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="#ffffff" />
+
+    <EditText
+        android:layout_gravity="center_horizontal"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:textSize="20sp"
+        android:id="@+id/et_regName"
+        android:hint="full name"
+        android:gravity="center"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="#ffffff" />
+
+    <EditText
+        android:layout_gravity="center_horizontal"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:textSize="20sp"
+        android:id="@+id/et_regEmail"
+        android:hint="email"
+        android:gravity="center"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="#ffffff" />
+
+
+    <Button
+        android:id="@+id/btn_regCreateAccount"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="60dp"
+        android:onClick="Register"
+        android:text="Create Account"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:background="#19D119"/>
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="flyapp.its_on"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_frdsmall"
+        android:label="IT&apos;S ON"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="flyapp.its_on.ProfileHome"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="flyapp.its_on.ChallengeMainPage"
+            android:label="@string/title_activity_challenge_main_page"
+            android:noHistory="true" >
+        </activity>
+        <activity
+            android:name="flyapp.its_on.NewChallenge"
+            android:label="@string/title_activity_new_challenge" >
+        </activity>
+    </application>
+
+</manifest>

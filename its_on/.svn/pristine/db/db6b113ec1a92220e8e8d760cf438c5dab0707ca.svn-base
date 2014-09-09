@@ -1,0 +1,333 @@
+package flyapp.its_on;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.lucasr.twowayview.TwoWayView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import flyapp.its_on.R;
+
+public class FriendsPage extends Activity {
+
+    private class Friend {
+        String friendName;
+        int friendId;
+    }
+
+    SessionManager userSession;
+
+    private String URL_ADDFRIEND;
+    private String URL_LOADFRIENDS;
+
+    private static final String TAG_SUCCESS = "success";    //string to get integer value of success
+    private static final String TAG_POSTS = "posts";    //string for retrieving POST data from php
+    private static final String TAG_MESSAGE = "message";    //key string used to retrieve JSON msgs from PHP
+
+    private static final String TAG_FRIENDS="friends";
+
+    private static final String TAG_FRIENDID="friend_id";
+    private static final String TAG_FRIENDUSERNAME="friend_username";
+
+    List<Friend> friendsList;
+
+    private List<NameValuePair> params; //used to store value for input into database
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_friends);
+        userSession = new SessionManager(getApplicationContext());
+
+        URL_ADDFRIEND= getApplicationContext().getResources().getString(R.string.ipaddress) + "addfriend.php";
+        URL_LOADFRIENDS=getApplicationContext().getResources().getString(R.string.ipaddress)+"retrievefriends.php";
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new LoadFriends().execute();
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.friends_page, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.action_addfriend:
+                addFriend();
+                return true;
+            case R.id.action_friendrequest:
+                Intent friendsRequest = new Intent(getApplicationContext(), FriendRequest.class);
+                startActivity(friendsRequest);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void addFriend()
+    {
+        final Dialog dialog = new Dialog(FriendsPage.this);
+        dialog.setTitle("Friend Request");
+        dialog.setContentView(R.layout.dialog_addfriend);
+
+        final EditText etGetFriendUsername=(EditText)dialog.findViewById(R.id.et_friendUsername);
+        final Button btnAddFriend=(Button)dialog.findViewById(R.id.btn_addFriend);
+
+        dialog.show();
+
+        btnAddFriend.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v)
+            {
+                HashMap<String, Integer> userIdHashmap = userSession.getUserId();
+
+                int userId=userIdHashmap.get(SessionManager.KEY_USERID);
+
+                params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("user_id", Integer.toString(userId)));
+                params.add(new BasicNameValuePair("friend_username", etGetFriendUsername.getText().toString()));
+
+
+                new AddFriend().execute();
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+
+
+    class AddFriend extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            // TODO Auto-generated method stub
+            // Check for success tag
+            int success;
+
+            try {
+                // Building Parameters
+                Log.d("request!", "starting");
+
+                JSONParser jsonParser = new JSONParser();
+                // getting product details by making HTTP request
+                JSONObject json = jsonParser.makeHttpRequest(URL_ADDFRIEND, "POST", params);
+
+                // check your log for json response
+                Log.d("Login attempt", json.toString());
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Login Successful!", json.toString());
+                    return json.getString(TAG_MESSAGE);
+                }else{
+                    Log.d("Login Failure!", json.toString());
+                    return json.getString(TAG_MESSAGE);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+
+            if (file_url != null){
+                Toast.makeText(FriendsPage.this, file_url, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    public class LoadFriends extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected Boolean doInBackground(Void... arg0) {
+            int success;
+            try {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+                HashMap<String, Integer> userIdHashmap = userSession.getUserId();
+
+                int userId=userIdHashmap.get(SessionManager.KEY_USERID);
+
+                params.add(new BasicNameValuePair("user_id",Integer.toString(userId)));
+
+                Log.d("request!", "starting");
+
+                JSONParser jsonParser = new JSONParser();
+
+                JSONObject json = jsonParser.makeHttpRequest(URL_LOADFRIENDS, "POST", params);  //does this POST have to be here? what does it signify?
+                Log.d("Register attempt", json.toString());
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Register Successful!", json.toString());
+                    updateJSONdata();
+                    return true;
+
+                } else {
+                    Log.d("Register Failed!", json.toString());
+                    return false;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+
+        FriendAdapter friendsListAdapter;
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            friendsListAdapter = new FriendAdapter();
+
+            ListView friendListView = (ListView)findViewById(R.id.lv_friends);
+            friendListView.setAdapter(friendsListAdapter);
+
+            friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                        long arg3) {
+                    //TODO: decide what to do when a friend is clicked->maybe next implementation
+
+                }
+            });
+
+        }
+    }
+
+    public void updateJSONdata() {
+
+        JSONParser jParser = new JSONParser();
+        JSONObject json = jParser.getJSONFromUrl(URL_LOADFRIENDS);
+        JSONArray friends=null;
+
+        try {
+            Friend friend;
+            friendsList= new ArrayList<Friend>();
+            friends= json.getJSONArray(TAG_FRIENDS);
+            if (friends != null) {
+                for (int i = 0; i < friends.length(); i++) {
+                    JSONObject c = friends.getJSONObject(i);
+                    friend=new Friend();
+                    friend.friendName=c.getString(TAG_FRIENDUSERNAME);
+                    friend.friendId=Integer.parseInt(c.getString(TAG_FRIENDID));
+                    friendsList.add(friend);
+
+                }
+            }
+        }
+        catch (JSONException e)
+        {}
+
+    }
+
+
+    public class FriendAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return friendsList.size();
+        }
+
+        @Override
+        public Friend getItem(int arg0) {
+            return friendsList.get(arg0);
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            return arg0;
+        }
+
+        @Override
+        public View getView(int arg0, View arg1, ViewGroup arg2) {
+
+            if(arg1==null)
+            {
+                LayoutInflater inflater = (LayoutInflater) FriendsPage.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                arg1 = inflater.inflate(R.layout.listitem_friend, arg2,false);
+            }
+
+            final Friend friend = friendsList.get(arg0);
+
+            TextView challengeName = (TextView)arg1.findViewById(R.id.tv_friendUsername);
+            challengeName.setText(friend.friendName);
+
+            //TODO: implement dp icon display for friend
+
+            return arg1;
+        }
+
+        public Friend getFriend(int position)
+        {
+            return friendsList.get(position);
+        }
+
+    }
+
+
+}

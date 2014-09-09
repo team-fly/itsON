@@ -1,0 +1,81 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#D4D4D4">
+
+    <!-- Q: check what the xmlns thing mean. does every layout need it? -->
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="160dp"
+        android:id="@+id/layout_profile">
+
+        <ImageView android:id="@+id/iv_cover"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_hdawgcover" />
+
+        <ImageView android:id="@+id/iv_dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/border"
+            android:src="@drawable/img_hdawgdp"
+            android:layout_above="@+id/ll_profileUserInfo"/>
+
+        <!-- Q: why did they add +id-->
+        <LinearLayout
+            android:id="@+id/ll_profileUserInfo"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            >
+
+            <TextView
+                android:id="@+id/tv_dpusername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HDAWG"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+             />
+
+            <TextView
+                android:id="@+id/tv_dpuserlevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LV 12"
+                android:textColor="#ffffff"
+                android:textSize="12dp"
+             />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/lv_challenges"
+        >
+     </ListView>
+
+    <!--
+    <ExpandableListView
+        android:id="@+id/elv_profileActChlg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+     </ExpandableListView>
+    -->
+
+</LinearLayout>

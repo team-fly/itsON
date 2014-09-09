@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Q: check what the xmlns thing mean. does every layout need it? -->
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="170dp"
+        android:id="@+id/layout_profile"
+        android:orientation="vertical">
+
+        <ImageView android:id="@+id/iv_cover"
+            android:layout_width="fill_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_hdawgcover" />
+
+        <ImageView android:id="@+id/iv_dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="5dp"
+            android:src="@drawable/img_hdawgdp" />
+
+        <!-- Q: why did they add +id-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_dp"
+            android:layout_alignTop="@id/iv_dp"
+            >
+
+            <TextView
+                android:id="@+id/tv_dpusername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HDAWG"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                android:paddingBottom="5dp"
+                android:paddingTop="20dp"
+             />
+
+            <TextView
+                android:id="@+id/tv_dpuserlevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LV 12"
+                android:textSize="12dp"
+             />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="New Challenge"
+            android:textStyle="bold"
+            android:layout_alignBottom="@+id/iv_addNewChlg"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"/>
+
+        <ImageView
+            android:id="@+id/iv_addNewChlg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:clickable="true"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+    <View style="@style/Divider"/>
+
+    <ExpandableListView
+        android:id="@+id/elv_profileActChlg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+     </ExpandableListView>
+
+</LinearLayout><!-- From: file:/C:/Users/HL/AndroidStudioProjects/Its_On/app/src/main/res/layout/activity_profile_home.xml -->
