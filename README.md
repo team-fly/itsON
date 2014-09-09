@@ -1,4 +1,5 @@
 itsON
 =====
 
-The PHP files were used to develop the itsON application (which is currently still in development)
+-users can create goal(s) of which both the user and a friend can strive to reach together
+-user set duration, weekly/daily occurrence of when to contribute to the goal
