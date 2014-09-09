@@ -1,0 +1,16 @@
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+}
+
+android {
+    compileSdkVersion 'android-L'
+    buildToolsVersion '19.1.0'
+}
+
+dependencies {
+    compile project(':library')
+    compile 'com.android.support:recyclerview-v7:+'
+    compile 'com.android.support:appcompat-v7:19.+'
+}
