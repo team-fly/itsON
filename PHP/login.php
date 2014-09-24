@@ -10,18 +10,11 @@ if (!empty($_POST)) {
 	
     //gets user's info based off of a username.
     $query = "
-            SELECT
-                user_id,
-                username,
-                password,
-				dp_url
+            SELECT *
             FROM users
 	            WHERE
-                username = '$username'
-	        ";
+                username = '$username'";
      
-
-
     try {
         $stmt   = $db->prepare($query); //HL: prepares the query. what is $db, $stmt
         $stmt->execute();  //executes the query
@@ -59,7 +52,12 @@ if (!empty($_POST)) {
 		{
 			$post = array();
 			$post["user_id"]    = $row["user_id"]; //check if this becomes an integer
-			$post["user_dp_url"]    = $row["dp_url"];
+			$post["username"]=$row["username"];
+			$post["fullname"]=$row["fullname"];
+			$post["emailaddr"]=$row["emailaddr"];
+			$post["dp_url"] = $row["dp_url"];
+			$post["cover_url"]=$row["cover_url"];
+			
 			$response["success"] = 1;
 			$response["message"] = "Login successful!";
 			
@@ -67,15 +65,14 @@ if (!empty($_POST)) {
 			
 			echo json_encode($response);
 		}	
-		
-
     }
 	else
 	{
 		$response["success"] = 0;
-		$response["message"] = "Invalid Credentials!";
+		$response["message"] = "User does not exist";
 		die(json_encode($response));
 	}
+
 
 } else {
 //HL: why is this else placed here? does it mean the script is done?

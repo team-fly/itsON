@@ -1,0 +1,14 @@
+package flyapp.its_on;
+
+import org.joda.time.DateTime;
+
+/**
+ * Created by HLiu on 14/09/2014.
+ */
+public class DateHandler {
+
+    private static DateTime startDate, endDate;
+    public DateHandler(String startDateString, String endDateString) {
+        //start
+    }
+}

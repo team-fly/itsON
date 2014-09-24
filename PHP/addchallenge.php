@@ -13,9 +13,7 @@
 	    }
 	     
 		 /*
-		 
 				CHECK IF CHALLENGE IS ALREADY IN DATABASE
-		 
 		 */
 		 
 		 
@@ -52,57 +50,38 @@
 		
 		//Retrieve variables from android
 		
-	$name=$_POST['name'];
-	$description=$_POST['description'];
-	$category=$_POST['category'];
-	$start_date = $_POST['start_date'];
-	$end_date = $_POST['end_date'];
-	$user_1= $_POST['user_1'];
-	$user_2= $_POST['user_2'];
-	$image_id = $_POST['image_id'];
+		$name=$_POST['name'];
+		$description=$_POST['description'];
+		$category=$_POST['category'];
+		$start_date = $_POST['start_date'];
+		$end_date = $_POST['end_date'];
+		$user_1= $_POST['user_1'];
+		$user_2= $_POST['user_2'];
+		$image_id = $_POST['image_id'];
+		$days_of_week=$_POST['days_of_week'];
 
-	$query = "INSERT INTO challenges_main ( name, description, category, start_date, end_date, user_1, user_2, image_id) 
-			VALUES ( '$name', '$description', '$category', '$start_date', '$end_date', '$user_1', '$user_2','$image_id')";
-		
-	    //time to run our query, and create the user
-	    try {
-	        $stmt   = $db->prepare($query);
+		$query = "INSERT INTO challenges_main ( name, description, category, start_date, end_date, user_1, user_2, image_id, days_of_week) 
+				VALUES ( '$name', '$description', '$category', '$start_date', '$end_date', '$user_1', '$user_2','$image_id','$days_of_week')";
+			
+		//time to run our query, and create the user
+		try {
+			$stmt   = $db->prepare($query);
 			$stmt->execute();
-	        //$result = $stmt->execute($query_params);
-	    }
-	    catch (PDOException $ex) {
-	        $response["success"] = 0;
-	        $response["message"] = "Unable to add challenge into database";
-	        die(json_encode($response));
-	    }
-
-
+			//$result = $stmt->execute($query_params);
+		}
+		catch (PDOException $ex) {
+			$response["success"] = 0;
+			$response["message"] = "Unable to add challenge into database";
+			die(json_encode($response));
+		}
+			
+		$response["success"] = 1;
+		$response["message"] = "Challenge Successfully Added!";
+		echo json_encode($response);
 		
+		//LEGACY CODE
 		
 		/*
-		 
-				FIND ID OF THE NEW CHALLENGE
-		 
-		*/
-		
-		
-	$query	= "SELECT MAX(id) AS 'id' FROM challenges_main";
-	     
-	    try {
-	        $stmt   = $db->prepare($query);
-	        $stmt->execute();
-	    }
-	    catch (PDOException $ex) {
-	        $response["success"] = 0;
-	        $response["message"] = "Database Error1. Please Try Again!";
-	        die(json_encode($response));
-	    }
-	     
-		//retrieves the row of data from query
-	$row = $stmt->fetch();
-	$challenge_id=$row["id"] ;
-		
-		
 		$start = strtotime($start_date);
 		$end = strtotime($end_date);
 		$datediff = floor(($end - $start)/(60*60*24));
@@ -127,10 +106,7 @@
 			$date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
 			
 		} 
-		
-		$response["success"] = 1;
-		$response["message"] = "Challenge Successfully Added!";
-		echo json_encode($response);
+		*/
 	     
 	} else {
 ?>
@@ -173,3 +149,5 @@
 <?php
 	}
 ?>
+
+

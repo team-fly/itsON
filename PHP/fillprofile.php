@@ -13,49 +13,6 @@ if (!empty($_POST)) {
 	
 	$user_id=$_POST['user_id'];
 
-	//////////////////////////////////////////////////////////////////
-	   
-	//////////		RETRIEVES URL FOR THE USER DP	 	//////////////
-	  
-	//////////////////////////////////////////////////////////////////
-	
-	$query = "SELECT dp_url FROM users WHERE user_id='$user_id'";
-
-	try {
-		$stmt   = $db->prepare($query);
-		$stmt->execute();
-	}
-	catch (PDOException $ex) {
-		$response["success"] = 0;
-		$response["message"] = "Database Error!";
-		die(json_encode($response));
-	}
-		
-	$row = $stmt->fetch();
-	$response["dp_url"]=$row["dp_url"];
-	
-	
-	//////////////////////////////////////////////////////////////////////
-	   
-	//////////		RETRIEVES URL FOR THE USER COVER	 	//////////////
-	  
-	//////////////////////////////////////////////////////////////////////
-	
-	$query = "SELECT cover_url FROM users WHERE user_id='$user_id'";
-
-	try {
-		$stmt   = $db->prepare($query);
-		$stmt->execute();
-	}
-	catch (PDOException $ex) {
-		$response["success"] = 0;
-		$response["message"] = "Database Error!";
-		die(json_encode($response));
-	}
-		
-	$row = $stmt->fetch();
-	$response["cover_url"]=$row["cover_url"];
-
 	
 	//////////////////////////////////////////////////////////////////////////
 	   
@@ -83,10 +40,9 @@ if (!empty($_POST)) {
 		$response["is_challenge_request_available"]=0;
 	}
 
-	$response["success"] = 1;	
+	
 	
 	$date=date('Y-m-d'); 
-	
 	
 	//////////////////////////////////////////////////////////////////////////////////////////
 	   
@@ -113,14 +69,23 @@ if (!empty($_POST)) {
 		$response["message"] = "Error Updating Table";
 		die(json_encode($response)); 
 	}
+	
+	
 			
-
+	///////////////////////////////////////////////////////////////////////////////////
+	   
+	//////////		RETRIEVES ALL CHALLENGES THAT AREN'T COMPLETE	 	//////////////
+	  
+	///////////////////////////////////////////////////////////////////////////////////
 	
 	
-	$query = "SELECT challenges_main.id, challenges_main.name, challenges_main.description, covers.url  AS 'url'
+	$query = "SELECT challenges_main.*, covers.url AS 'cover_url', 
+						A.username AS 'user_1_username', A.dp_url AS 'user_1_dp_url',
+						B.username AS 'user_2_username', B.dp_url AS 'user_2_dp_url'
 				FROM `challenges_main`
-				INNER JOIN `covers`
-				ON challenges_main.image_id=covers.id
+                INNER JOIN users A ON A.user_id=challenges_main.user_1
+                INNER JOIN users B ON B.user_id=challenges_main.user_2
+				INNER JOIN covers ON challenges_main.image_id=covers.id
 				WHERE (challenges_main.user_1 ='$user_id' OR challenges_main.user_2 ='$user_id')
 				AND challenges_main.status='1'
 				AND challenges_main.iscomplete='0'";
@@ -136,61 +101,71 @@ if (!empty($_POST)) {
 	    die(json_encode($response));
 	}
 	 
-
+	$response["success"] = 1;	
+	$response["message"] = "Challenges Retrieved";
+		
 	$rows = $stmt->fetchAll();
 	 
 	 
 	if ($rows) {
 
-		$response["is_challenge_available"]=1;
-	    $response["challengeinfo"]   = array();
-	     
+		$response["is_challenge_available"]=1; //TODO: remove later
+	    
+		$response["challenge_info"]=array();
+		
 	    foreach ($rows as $row) {
-			//HL: does the variable name "post" matter?
-			
 	        $post = array();
-			$post["id"]    = $row["id"]; //check if this becomes an integer
+			
+			$challenge_id=$row["id"]; 
+			$user_1=$row["user_1"]; 
+			$user_2=$row["user_2"]; 
+			
+			$post["id"]    = $row["id"]; 
 	        $post["name"] = $row["name"];
 	        $post["description"]    = $row["description"];
-			$post["url"]=$row["url"];
-		
-		
+			$post["category"]=$row["category"];
+			$post["start_date"]=$row["start_date"];
+			$post["end_date"]=$row["end_date"];
+			$post["user_1"]=$row["user_1"];
+			$post["user_2"]=$row["user_2"];
+			$post["user_1_dp_url"]=$row["user_1_dp_url"];
+			$post["user_2_dp_url"]=$row["user_2_dp_url"];
+			$post["user_1_username"]=$row["user_1_username"];
+			$post["user_2_username"]=$row["user_2_username"];
+			$post["days_of_week"]=$row["days_of_week"];
+			$post["cover_url"]=$row["cover_url"];
 			
-			$challenge_id=$row["id"];
-			
-			//Get the info from udates table to see if challenge has been completed for today
-			$query="SELECT iscomplete AS 'iscomplete'
-				FROM updates
-				WHERE challenge_id = '$challenge_id'
-				AND updates.date = '$date'
-				AND updates.user_id = '$user_id'";
-			
-				
+			$query="SELECT * FROM updates 
+					WHERE challenge_id='$challenge_id'
+					AND user_id='$user_id'
+					AND date='$date'";
+					
 			try {
 				$stmt   = $db->prepare($query);
 				$stmt->execute();
-			}
-			catch (PDOException $ex) {
+			}catch (PDOException $ex) {
 				$response["success"] = 0;
 				$response["message"] = "Database Error!";
 				die(json_encode($response));
 			}
 			
-			$row = $stmt->fetch();
-			$post["iscomplete"]=$row["iscomplete"];
-		
-			//check if we have to array push everytime
-	        array_push($response["challengeinfo"], $post);
-	    }
-	     
-	    // echoing JSON response
+			$rows = $stmt->fetchAll();
+			
+			if($rows){
+				$post["update_status"]=1;
+			}else{
+				$post["update_status"]=0;
+			}
+			
+			array_push($response["challenge_info"], $post);
+		}
+	
 	    echo json_encode($response);
-	     
-	     
 	} else {
 		$response["is_challenge_available"]=0;
 	    $response["message"] = "No Challenges!";
 	    echo json_encode($response);
+		
 	}
 	 
 } else {

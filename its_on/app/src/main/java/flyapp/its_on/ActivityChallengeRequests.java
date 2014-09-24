@@ -34,7 +34,7 @@ public class ActivityChallengeRequests extends Activity {
     private static String URL_CONFIRM_CHALLENGE_REQUEST;    //url for php script that confirm challenge requests
 
     private static final String PHPTAG_SUCCESS = "success";    //string to get integer value of success
-    private static final String PHPTAG_POSTS = "challenge_requests";    //string for retrieving POST data from php
+    private static final String PHPTAG_POSTS = "challenge_info";    //string for retrieving POST data from php
     private static final String PHPTAG_MESSAGE = "message";    //key string used to retrieve JSON msgs from PHP
     private static final String PHPTAG_USERID = "user_id";
     private static final String PHPTAG_CHALLENGEID="challenge_id";
@@ -73,7 +73,6 @@ public class ActivityChallengeRequests extends Activity {
         new LoadChallengeRequests().execute();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -92,7 +91,6 @@ public class ActivityChallengeRequests extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     public class LoadChallengeRequests extends AsyncTask<Void, Void, Boolean> {
 
@@ -128,7 +126,7 @@ public class ActivityChallengeRequests extends Activity {
 
                     for (int i = 0; i < sqlData.length(); i++) {
                         challenge=new Challenge(ActivityChallengeRequests.this.getApplicationContext());
-                        if(challenge.loadChallengeRequest(sqlData.getJSONObject(i))) {
+                        if(challenge.loadChallengeInfo(sqlData.getJSONObject(i))) {
                             challengeRequestList.add(challenge);
                         }
                     }
@@ -207,7 +205,6 @@ public class ActivityChallengeRequests extends Activity {
         }
     }
 
-
     public class ChallengeRequestAdapter extends BaseAdapter {
 
         @Override
@@ -240,7 +237,7 @@ public class ActivityChallengeRequests extends Activity {
             challengeName.setText(challenge.getName());
 
             TextView challengeFriendUsername=(TextView)arg1.findViewById(R.id.tv_chlgReqHostUsername);
-            challengeFriendUsername.setText(challenge.getFriendName());
+            challengeFriendUsername.setText(challenge.getUser1Username());
 
             TextView challengeDesc = (TextView)arg1.findViewById(R.id.tv_chlgReqDescription);
             challengeDesc.setText(challenge.getDescription());
@@ -258,7 +255,6 @@ public class ActivityChallengeRequests extends Activity {
         }
 
     }
-
 
     public class ConfirmChallengeRequest extends AsyncTask<Integer, Void, Boolean> {
 

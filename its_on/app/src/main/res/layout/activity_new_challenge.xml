@@ -1,14 +1,16 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+
     android:background="#E6E6E0">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="flyapp.its_on.ProfileSettings">
+        tools:context="flyapp.its_on.ActivityProfileSettings">
 
 
         <LinearLayout
@@ -26,6 +28,7 @@
             android:background="#ffffff">
 
             <TextView
+                android:id="@+id/tv_title"
                 android:text="New Goal"
                 android:textColor="#4fa5d5"
                 android:textSize="20sp"
@@ -187,6 +190,7 @@
 
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rl_addParticipant"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
@@ -232,6 +236,7 @@
 
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/rl_addCover"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
@@ -342,6 +347,7 @@
                     android:textStyle="italic"
                     android:textColor="#4fa5d5"
                     android:id="@+id/cb_monday"
+                    android:checked="true"
                     android:layout_gravity="center_horizontal" />
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -350,6 +356,7 @@
                     android:textStyle="italic"
                     android:textColor="#4fa5d5"
                     android:id="@+id/cb_tuesday"
+                    android:checked="true"
                     android:layout_gravity="center_horizontal" />
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -358,6 +365,7 @@
                     android:textStyle="italic"
                     android:textColor="#4fa5d5"
                     android:id="@+id/cb_wednesday"
+                    android:checked="true"
                     android:layout_gravity="center_horizontal" />
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -366,6 +374,7 @@
                     android:textStyle="italic"
                     android:textColor="#4fa5d5"
                     android:id="@+id/cb_thursday"
+                    android:checked="true"
                     android:layout_gravity="center_horizontal" />
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -374,6 +383,7 @@
                     android:textStyle="italic"
                     android:textColor="#4fa5d5"
                     android:id="@+id/cb_friday"
+                    android:checked="true"
                     android:layout_gravity="center_horizontal" />
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -382,6 +392,7 @@
                     android:textStyle="italic"
                     android:textColor="#4fa5d5"
                     android:id="@+id/cb_saturday"
+                    android:checked="true"
                     android:layout_gravity="center_horizontal" />
 
                 <CheckBox
@@ -390,6 +401,7 @@
                     android:text="Su"
                     android:textStyle="italic"
                     android:textColor="#4fa5d5"
+                    android:checked="true"
                     android:id="@+id/cb_sunday"
                     android:layout_gravity="center_horizontal" />
 
@@ -398,6 +410,7 @@
 
         </LinearLayout>
         <Button
+            android:id="@+id/btn_commit"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:background="#4fa5d5"

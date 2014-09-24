@@ -16,11 +16,8 @@ if (!empty($_POST)) {
 	  
 	///////////////////////////////////////////////////////////////////////
     
-	$query = "UPDATE updates
-			SET iscomplete='1', message='$update_message'
-			WHERE date='$date'
-			AND user_id='$user_id'
-			AND challenge_id='$challenge_id'" ;
+	$query = "INSERT INTO updates
+				VALUES('$challenge_id','$user_id','$date','$update_message')";
      
 	try {
 	    $stmt   = $db->prepare($query);

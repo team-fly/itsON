@@ -4,7 +4,7 @@
 
     <!-- Location Found -->
     <item android:id="@+id/action_addchallenge"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/ic_add_old"
         android:title="add_challenge"
         android:showAsAction="always" />
 
@@ -18,7 +18,7 @@
         android:icon="@drawable/ic_lightbulb"
         android:showAsAction="always" />
 
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/action_profile_settings"
         android:title="Settings"
         android:orderInCategory="1"
         android:showAsAction="never" />

@@ -22,6 +22,7 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -69,8 +70,12 @@
         <service android:name=".HttpCallIntentService" />
 
         <activity
-            android:name=".ProfileSettings"
+            android:name=".ActivityProfileSettings"
             android:label="@string/title_activity_profile_settings" >
+        </activity>
+        <activity
+            android:name=".ActivityChallengeSettings"
+            android:label="@string/title_activity_activity_challenge_settings" >
         </activity>
     </application>
 

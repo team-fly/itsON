@@ -1,0 +1,370 @@
+package flyapp.its_on;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+
+/**
+ * Created by HLiu on 05/08/2014.
+ */
+public class Challenge {
+
+    private static String UPDATE_URL;     //link to php file for updating a challange
+
+    private static final String TAG_SUCCESS = "success";    //string to get integer value of success
+    private static final String TAG_MESSAGE = "message";    //key string used to retrieve JSON msgs from PHP
+
+    private static final String TAG_ID = "id";      //key string used for retrieve id from POST in PHP
+    private static final String TAG_NAME = "name";  //key string used for retrieve name from POST in PHP
+    private static final String TAG_DESCRIPTION = "description";    //key string used for retrieve description from POST in PHP
+    private static final String TAG_COVER_URL = "cover_url";    //key string used for retrieve description from POST in PHP
+    private static final String TAG_FRIENDUSERNAME="friend_username";
+    private static final String PHPTAG_SELECTED_WEEKDAYS="days_of_week";
+    private static final String PHPTAG_START_DATE="start_date";
+    private static final String PHPTAG_END_DATE="end_date";
+    private static final String PHPTAG_USER_1="user_1";
+    private static final String PHPTAG_USER_2="user_2";
+    private static final String PHPTAG_USER_1_USERNAME="user_1_username";
+    private static final String PHPTAG_USER_2_USERNAME="user_2_username";
+    private static final String PHPTAG_USER_1_DP_URL="user_1_dp_url";
+    private static final String PHPTAG_USER_2_DP_URL="user_2_dp_url";
+
+    private User user1;
+    private User user2;
+
+    private DateHandler dateHandlerUser1;
+    private DateHandler dateHandlerUser2;
+
+
+    private int ID;
+    private String NAME;
+    private String DESCRIPTION;
+    private Bitmap COVER;
+    private String USERNAME; //TODO: delete this
+    private String CLGREQFRIENDUSERNAME;//TODO: no point having two friend user name (duplicate with USER2USERNAME. figure something else later
+    private String SELECTED_WEEKDAYS;
+    private String START_DATE;
+    private String END_DATE;
+
+    private static String URL_DELETECHALLENGE;
+    UserSession userSession;
+
+    private Context context;
+
+    private static final ImageHandler imageHandler=new ImageHandler();
+
+    // constructor
+    public Challenge(Context arg0) {
+        context=arg0;
+        UPDATE_URL= context.getResources().getString(R.string.ipaddress) + "update.php";
+        userSession = new UserSession(context);
+
+    }
+
+    // constructor
+    public Challenge() {
+    }
+
+    public boolean loadChallengeInfo(JSONObject data, JSONArray user1Dates, JSONArray user2Dates) {
+        try {
+
+            ID =Integer.parseInt(data.getString(TAG_ID));
+            NAME = data.getString(TAG_NAME);
+            DESCRIPTION = data.getString(TAG_DESCRIPTION);
+            COVER=imageHandler.loadImageFromUrl(data.getString(TAG_COVER_URL));
+
+            START_DATE=data.getString(PHPTAG_START_DATE);
+            END_DATE=data.getString(PHPTAG_END_DATE);
+            SELECTED_WEEKDAYS=data.getString(PHPTAG_SELECTED_WEEKDAYS);
+
+            USERNAME = userSession.getUserName();
+
+            user1=new User();
+            user1.id=data.getInt(PHPTAG_USER_1);
+            user1.username=data.getString(PHPTAG_USER_1_USERNAME);
+            user1.dp=imageHandler.loadImageFromUrl(data.getString(PHPTAG_USER_1_DP_URL));
+
+            user2=new User();
+            user2.id=data.getInt(PHPTAG_USER_2);
+            user2.username=data.getString(PHPTAG_USER_2_USERNAME);
+            user2.dp=imageHandler.loadImageFromUrl(data.getString(PHPTAG_USER_2_DP_URL));
+
+            dateHandlerUser1=new DateHandler(START_DATE, END_DATE, SELECTED_WEEKDAYS, user1Dates);
+            dateHandlerUser2=new DateHandler(START_DATE, END_DATE, SELECTED_WEEKDAYS, user2Dates);
+
+            //TODO:
+                //TODO: 1. store list of dates, messages in the challenge itself
+                //TODO: 2. make list of all the recent updates with dates
+                //TODO: 3. fix challenge request
+                //TODO: 4. challenge settings update
+
+            return true;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean loadChallengeRequest(JSONObject data) {
+        try {
+
+            ID =Integer.parseInt(data.getString(TAG_ID));
+            NAME = data.getString(TAG_NAME);
+            DESCRIPTION = data.getString(TAG_DESCRIPTION);
+            COVER=imageHandler.loadImageFromUrl(data.getString(TAG_COVER_URL));
+
+            USERNAME = userSession.getUserName();
+            CLGREQFRIENDUSERNAME=data.getString(TAG_FRIENDUSERNAME);
+            return true;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean loadArchivedChallenges(JSONObject data) {
+        try {
+
+            ID =Integer.parseInt(data.getString(TAG_ID));
+            NAME = data.getString(TAG_NAME);
+            DESCRIPTION=data.getString(TAG_DESCRIPTION);
+            END_DATE = data.getString(PHPTAG_END_DATE);
+
+            return true;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<DateHandler.UpdateParcel> retrieveCurrentUserDates(){
+
+        if(userSession.getUserId()==user1.id){
+            return dateHandlerUser1.getUpdateParcelList();
+        }else{
+            return dateHandlerUser2.getUpdateParcelList();
+        }
+    }
+
+    public boolean checkIfUpdatable(){
+        if(userSession.getUserId()==user1.id){
+            return dateHandlerUser1.checkIfUpdatable();
+        }else{
+            return dateHandlerUser2.checkIfUpdatable();
+        }
+    }
+
+    public boolean checkIfUpdated(){
+        if(userSession.getUserId()==user1.id){
+            return dateHandlerUser1.checkIfUpdated();
+        }else{
+            return dateHandlerUser2.checkIfUpdated();
+        }
+    }
+
+    public int getId() { return ID;}
+
+    public int getUser1Id() { return user1.id;}
+
+    public int getUser2Id() { return user2.id;}
+
+    public String getUser1Username() { return user1.username;}
+
+    public String getUser2Username() { return user2.username;}
+
+    public Bitmap getUser1Dp() { return user1.dp;}
+
+    public Bitmap getUser2Dp() { return user2.dp;}
+
+    public String getName() { return NAME; }
+
+    public String getFriendName() {
+        if(CLGREQFRIENDUSERNAME!=null)
+            return CLGREQFRIENDUSERNAME;
+        else
+            return null;
+
+    }
+
+    public String getDescription() { return DESCRIPTION; }
+
+    public Bitmap getCoverBitmap() { return COVER;}
+
+    public void updateToday(String message)
+    {
+        if(userSession.getUserId()==user1.id)
+        {
+            dateHandlerUser1.addUpdateParcel(message);
+        }else{
+            dateHandlerUser2.addUpdateParcel(message);
+        }
+        new UpdateChallengeTask().execute(message);
+    }
+
+    public String getEndDate() { return END_DATE; }
+
+    public void deleteChallenge(BasicNameValuePair[] params, Context context){
+
+        DeleteChallengeTask deleteChallengeTask=new DeleteChallengeTask(context);
+        deleteChallengeTask.execute(params);
+    }
+
+    private class UpdateChallengeTask extends AsyncTask<String, String, String > {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            //we will develop this method in version 2
+            int success;
+
+            try {
+                // Building Parameters
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+                int userId = userSession.getUserId();
+
+                params.add(new BasicNameValuePair("user_id", Integer.toString(userId)));
+                params.add(new BasicNameValuePair("challenge_id", Integer.toString(ID)));
+                params.add(new BasicNameValuePair("update_message", args[0]));
+
+                JSONParser jsonParser = new JSONParser();
+
+                JSONObject json = jsonParser.makeHttpRequest(UPDATE_URL, "POST", params);
+
+                success = json.getInt(TAG_SUCCESS);
+
+                if (success == 1) {
+                    return "Updated";
+                } else {
+                    return "Update Unsuccessful :(";
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return "Error Accessing Database";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+             Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private class DeleteChallengeTask extends AsyncTask<BasicNameValuePair, Void, Boolean> {
+
+        private Context mContext;
+
+        public DeleteChallengeTask(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            URL_DELETECHALLENGE=mContext.getResources().getString(R.string.ipaddress)+"deletechallenge.php";
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(BasicNameValuePair... paramSet) {
+            int success;
+            try {
+                List<NameValuePair> paramList = new ArrayList<NameValuePair>();
+
+                for(BasicNameValuePair valuePair: paramSet)
+                {
+                    paramList.add(valuePair);
+                }
+
+                JSONParser jsonParser = new JSONParser();
+                JSONObject json = jsonParser.makeHttpRequest(URL_DELETECHALLENGE, "POST", paramList);
+
+                success = json.getInt(TAG_SUCCESS);
+
+                if (success == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (JSONException e) {
+                return false;
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if(result){
+                Toast.makeText(mContext, "Challenge Deleted", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ((Activity) mContext).finish();
+
+                //Intent friendScreen = new Intent((Activity)mContext, ActivityProfileHome.class);
+                //((Activity)mContext).startActivity(friendScreen);
+            }else{
+                Toast.makeText(mContext, "Error Accessing Server", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public List<DateHandler.UpdateParcel> getCompleteUpdateParcelList(){
+
+        DateHandler.UpdateParcel updateParcel;
+        List<DateHandler.UpdateParcel> listUpdateParcelFull=new ArrayList<DateHandler.UpdateParcel>();
+        List<DateHandler.UpdateParcel> listUpdateParcelUser1=dateHandlerUser1.getUpdateParcelList();
+        List<DateHandler.UpdateParcel> listUpdateParcelUser2=dateHandlerUser2.getUpdateParcelList();
+
+        int maxListSizeAmongUsers;
+        if(listUpdateParcelUser1.size()>listUpdateParcelUser2.size()){
+            maxListSizeAmongUsers=listUpdateParcelUser1.size();
+        }else{
+            maxListSizeAmongUsers=listUpdateParcelUser2.size();
+        }
+
+        for(int i=maxListSizeAmongUsers-1; i>=0; i--){
+            if(i<listUpdateParcelUser1.size()) {
+                updateParcel = listUpdateParcelUser1.get(i);
+                if (updateParcel.iscomp) {
+                    updateParcel.userId = user1.id;
+                    listUpdateParcelFull.add(updateParcel);
+                }
+            }
+
+            if(i<listUpdateParcelUser2.size()) {
+                updateParcel = listUpdateParcelUser2.get(i);
+                if (updateParcel.iscomp) {
+                    updateParcel.userId = user2.id;   //TODO: figure out a better way to put username, dp with the parcel
+                    listUpdateParcelFull.add(updateParcel);
+                }
+            }
+        }
+
+        return listUpdateParcelFull;
+    }
+}

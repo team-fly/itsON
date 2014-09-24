@@ -11,6 +11,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -40,12 +42,10 @@ public class ActivityProfileHome extends Activity {
     private static String URL_FILL_PROFILE;    //link to php file used to fill the Profile page with challenges
 
     private static final String PHPTAG_SUCCESS = "success";    //string to get integer value of success
-    private static final String PHPTAG_CHALLENGE_INFORMATION = "challengeinfo";    //string for retrieving POST data from php
-    private static final String PHPTAG_DP_URL = "dp_url";    //string for retrieving displya picture url
-    private static final String PHPTAG_COVER_URL = "cover_url";    //string for retrieving displya picture url
     private static final String PHPTAG_IS_CHALLENGE_REQUEST_AVAILABLE ="is_challenge_request_available";
     private static final String PHPTAG_ARCHIVED ="archived";
     private static final String PHPTAG_CHALLENGES_AVAILABLE ="is_challenge_available";
+    private static final String PHPTAG_CHALLENGE_INFO="challenge_info";
 
 
     private static List<Challenge> challengeList;   //list to hold all the challenges retrieved from server
@@ -136,15 +136,14 @@ public class ActivityProfileHome extends Activity {
                 Intent loginScreen = new Intent(getApplicationContext(), ActivitySignInScreen.class);
                 startActivity(loginScreen);
                 return true;
-            case R.id.action_settings:
-                Intent settingScrren=new Intent(getApplicationContext(), ProfileSettings.class);
-                startActivity(settingScrren);
+            case R.id.action_profile_settings:
+                Intent settingScreen=new Intent(getApplicationContext(), ActivityProfileSettings.class);
+                startActivity(settingScreen);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
 
 
     //Custom Adapter for the challenges Listview
@@ -184,19 +183,25 @@ public class ActivityProfileHome extends Activity {
             TextView challengeName = (TextView)arg1.findViewById(R.id.tv_profileChlgTitle);
             challengeName.setText(challenge.getName());
 
-            //checks if the challenge has been completed
-            //if challenge is completed, sets filled icon; if not, sets imageview to unfilled icon
-            final ImageView check=(ImageView)arg1.findViewById(R.id.iv_update);
-            if(challenge.checkIfTodayComplete()) {
-                check.setImageDrawable(getResources().getDrawable(R.drawable.icon_updated));
-            }
-            else {
-                check.setImageDrawable(getResources().getDrawable(R.drawable.icon_update));
-            }
-
             //sets the imagview of the challenge cover photo
             ImageView challengeCover=(ImageView)arg1.findViewById(R.id.iv_profileChlgCover);
             challengeCover.setImageBitmap(challenge.getCoverBitmap());
+
+            //TODO: check why each challenge is called twice
+            final ImageView check=(ImageView)arg1.findViewById(R.id.iv_update);
+
+            if(challenge.getTodayUpdateStatus()==-1) {
+                check.setImageDrawable(getResources().getDrawable(R.drawable.icon_update_disabled));
+                challengeName.setTextColor(Color.GRAY);
+                challengeCover.setColorFilter(Color.GRAY, PorterDuff.Mode.DARKEN);
+            }else if(challenge.getTodayUpdateStatus()==1){
+                check.setImageDrawable(getResources().getDrawable(R.drawable.icon_updated));
+            }else if(challenge.getTodayUpdateStatus()==0){
+                challengeCover.clearColorFilter();
+                challengeName.setTextColor(Color.WHITE);
+                check.setImageDrawable(getResources().getDrawable(R.drawable.icon_update));
+            }
+
 
             //Listener event for when the challenge is clicked
             challengeCover.setOnClickListener(new View.OnClickListener() {
@@ -210,10 +215,12 @@ public class ActivityProfileHome extends Activity {
             );
 
             //Listener event when the check icon has been clicked
-            check.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
+            check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    if(challenge.getTodayUpdateStatus()==0)
+                    {
                         //populates the dialog to allow user to enter a message for the update
                         final Dialog dialog = new Dialog(ActivityProfileHome.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -226,8 +233,8 @@ public class ActivityProfileHome extends Activity {
                         upd_desc.setText(challenge.getDescription());
 
                         //HL: defining text inputbox, buttons from the dialog
-                        Button btn_upd=(Button)dialog.findViewById(R.id.btn_updateDialogCommit);
-                        Button btn_cancel=(Button)dialog.findViewById(R.id.btn_updateDialogCancel);
+                        Button btn_upd = (Button) dialog.findViewById(R.id.btn_updateDialogCommit);
+                        Button btn_cancel = (Button) dialog.findViewById(R.id.btn_updateDialogCancel);
 
                         //shows dialog
                         dialog.show();
@@ -236,16 +243,13 @@ public class ActivityProfileHome extends Activity {
                         btn_upd.setOnClickListener(new View.OnClickListener() {
 
                             @Override
-                            public void onClick(View v)
-                            {
-                                EditText etUpdateMessage=(EditText)dialog.findViewById(R.id.et_updateDialogMsg);
-                                challenge.setUpdateMessage(etUpdateMessage.getText().toString());
-
+                            public void onClick(View v) {
+                                EditText etUpdateMessage = (EditText) dialog.findViewById(R.id.et_updateDialogMsg);
                                 //sole purpose is update the check image
-                                challengeList.get(arg0).updateToday();
+                                challengeList.get(arg0).updateToday(etUpdateMessage.getText().toString());
                                 challengeListAdapter.notifyDataSetChanged();
-
-                                challenge.updateTodayOnServer();
+                                //TODO: see if adapter will update
+                                //challenge.updateTodayOnServer();
                                 dialog.dismiss();
                             }
 
@@ -255,14 +259,15 @@ public class ActivityProfileHome extends Activity {
                         btn_cancel.setOnClickListener(new View.OnClickListener() {
 
                             @Override
-                            public void onClick(View v)
-                            {
+                            public void onClick(View v) {
                                 dialog.dismiss();
                             }
                         });
                     }
                 }
+            }
             );
+
             return arg1;
         }
 
@@ -327,24 +332,43 @@ public class ActivityProfileHome extends Activity {
                     }
 
                     //container for JSON string
-                    JSONArray sqlData = null;
+                    JSONArray chlgJsonArray = null;
                     Challenge challenge;
+                    List<List<Challenge>> sortedChallenges = new ArrayList<List<Challenge>>();
+
+                    sortedChallenges.add(new ArrayList<Challenge>());
+                    sortedChallenges.add(new ArrayList<Challenge>());
+                    sortedChallenges.add(new ArrayList<Challenge>());
+
 
                     if(challengeAvailable==1) {
                         //retrieves challenge information from JSON Object
-                        sqlData = json.getJSONArray(PHPTAG_CHALLENGE_INFORMATION);
+                        chlgJsonArray = json.getJSONArray(PHPTAG_CHALLENGE_INFO);
 
                         //creates and populates challenge object based on retrieved info form JSON
-                        for (int i = 0; i < sqlData.length(); i++) {
+                        for (int i = 0; i < chlgJsonArray.length(); i++) {
                             challenge = new Challenge(ActivityProfileHome.this.getApplicationContext());
-                            if (challenge.loadChallengeInfo(sqlData.getJSONObject(i))) {
-                                challengeList.add(challenge);
+
+                            JSONObject challengeInfoJsonObj=chlgJsonArray.getJSONObject(i);
+
+                            if (challenge.loadChallengeInfo(challengeInfoJsonObj)) {
+                                if(challenge.getTodayUpdateStatus()==0){
+                                    sortedChallenges.get(0).add(challenge);
+                                }else if(challenge.getTodayUpdateStatus()==1){
+                                    sortedChallenges.get(1).add(challenge);
+                                }else if(challenge.getTodayUpdateStatus()==-1){
+                                    sortedChallenges.get(2).add(challenge);
+                                }
+                                //challengeList.add(challenge);
+                            }
+                        }
+
+                        for(int i=0; i<sortedChallenges.size(); i++){
+                            for(Challenge c:sortedChallenges.get(i)){
+                                challengeList.add(c);
                             }
                         }
                     }
-
-
-                    //return true indicating sucess
                     return true;
                 } else {
                     //return false indicating failure
@@ -364,13 +388,12 @@ public class ActivityProfileHome extends Activity {
                 //refreshes custom adapter for challenge list item
                 challengeListAdapter = new ChallengeAdapter();
 
-
-
                 //populates the imageview with display picture downloaded
                 CircleImageView ivDp=(CircleImageView)headerView.findViewById(R.id.iv_dp);
                 ivDp.setImageBitmap(dpBitmap);
 
                 ImageView ivCover=(ImageView)headerView.findViewById(R.id.iv_cover);
+                //ivCover.setColorFilter(Color.GRAY, PorterDuff.Mode.DARKEN);
                 ivCover.setImageBitmap(coverBitmap);
 
 

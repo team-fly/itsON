@@ -1,0 +1,101 @@
+[08-Sep-2014 18:32:58 America/Denver] PHP Parse error:  syntax error, unexpected ')', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in /home7/teamflyc/public_html/teamflyc_webserver/addchallenge.php on line 107
+[08-Sep-2014 18:39:34 America/Denver] PHP Parse error:  syntax error, unexpected ')', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in /home7/teamflyc/public_html/teamflyc_webserver/addchallenge.php on line 107
+[08-Sep-2014 18:40:39 America/Denver] PHP Parse error:  syntax error, unexpected ')', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in /home7/teamflyc/public_html/teamflyc_webserver/addchallenge.php on line 104
+[08-Sep-2014 18:42:11 America/Denver] PHP Parse error:  syntax error, unexpected ')', expecting :: (T_PAAMAYIM_NEKUDOTAYIM) in /home7/teamflyc/public_html/teamflyc_webserver/addchallenge.php on line 104
+[09-Sep-2014 19:13:00 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 143
+[09-Sep-2014 19:13:43 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 143
+[09-Sep-2014 19:14:32 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 143
+[09-Sep-2014 19:16:06 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 143
+[11-Sep-2014 18:08:38 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 69
+[11-Sep-2014 18:08:38 America/Denver] PHP Notice:  Undefined variable: rows in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 70
+[11-Sep-2014 18:08:38 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 164
+[11-Sep-2014 18:08:38 America/Denver] PHP Notice:  Undefined variable: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 177
+[11-Sep-2014 18:08:56 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 69
+[11-Sep-2014 18:08:56 America/Denver] PHP Notice:  Undefined variable: rows in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 70
+[11-Sep-2014 18:08:56 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 164
+[11-Sep-2014 18:08:56 America/Denver] PHP Notice:  Undefined variable: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 177
+[11-Sep-2014 18:09:50 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 69
+[11-Sep-2014 18:09:50 America/Denver] PHP Notice:  Undefined variable: rows in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 70
+[11-Sep-2014 18:09:50 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 164
+[11-Sep-2014 18:11:26 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 68
+[11-Sep-2014 18:11:26 America/Denver] PHP Notice:  Undefined variable: rows in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 69
+[11-Sep-2014 18:11:26 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 163
+[11-Sep-2014 18:13:38 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 68
+[11-Sep-2014 18:13:38 America/Denver] PHP Notice:  Undefined variable: rows in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 69
+[11-Sep-2014 18:14:29 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 68
+[11-Sep-2014 18:14:29 America/Denver] PHP Notice:  Undefined variable: rows in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 69
+[11-Sep-2014 18:14:29 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 165
+[11-Sep-2014 18:19:26 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 68
+[11-Sep-2014 18:19:26 America/Denver] PHP Notice:  Undefined variable: rows in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 69
+[11-Sep-2014 18:19:26 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 188
+[11-Sep-2014 18:20:14 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 68
+[11-Sep-2014 18:20:14 America/Denver] PHP Notice:  Undefined index: user_1_dpurl in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 70
+[11-Sep-2014 18:20:14 America/Denver] PHP Notice:  Undefined index: user_2_dpurl in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 106
+[11-Sep-2014 18:20:14 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, string given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 166
+[11-Sep-2014 18:20:49 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 68
+[11-Sep-2014 18:20:49 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, string given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 166
+[11-Sep-2014 18:23:40 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 18:23:40 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, string given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 140
+[11-Sep-2014 18:24:02 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 18:24:02 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, string given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 140
+[11-Sep-2014 18:24:22 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 18:24:22 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, string given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 139
+[11-Sep-2014 18:56:38 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 18:56:38 America/Denver] PHP Notice:  Undefined index: user_1_iscomplete in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 140
+[11-Sep-2014 18:56:38 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, string given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 141
+[11-Sep-2014 18:57:09 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 18:57:09 America/Denver] PHP Notice:  Undefined index: user_1_iscomplete in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 140
+[11-Sep-2014 18:57:09 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, string given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 141
+[11-Sep-2014 19:00:23 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:01:05 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:01:24 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:02:46 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:03:46 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:04:33 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:04:58 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:05:13 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:05:34 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:05:54 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:06:06 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:06:21 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:06:27 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:06:34 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:06:54 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:07:02 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:07:11 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:09:02 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[11-Sep-2014 19:09:38 America/Denver] PHP Notice:  Undefined index: user_id in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 42
+[14-Sep-2014 13:19:05 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 119
+[14-Sep-2014 13:20:01 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 119
+[14-Sep-2014 13:20:01 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 231
+[14-Sep-2014 13:23:00 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 119
+[14-Sep-2014 13:23:00 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 226
+[14-Sep-2014 13:28:15 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 118
+[14-Sep-2014 13:28:15 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 224
+[14-Sep-2014 13:29:28 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 118
+[14-Sep-2014 13:33:12 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillchallenge.php on line 118
+[14-Sep-2014 14:01:22 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 126
+[14-Sep-2014 14:01:22 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 132
+[14-Sep-2014 14:01:22 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 126
+[14-Sep-2014 14:01:22 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 132
+[14-Sep-2014 14:01:22 America/Denver] PHP Warning:  array_push() expects parameter 1 to be array, null given in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 126
+[14-Sep-2014 14:01:22 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 132
+[14-Sep-2014 14:03:21 America/Denver] PHP Parse error:  syntax error, unexpected '$post' (T_VARIABLE) in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 113
+[14-Sep-2014 14:03:23 America/Denver] PHP Parse error:  syntax error, unexpected '$post' (T_VARIABLE) in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 113
+[14-Sep-2014 14:03:44 America/Denver] PHP Parse error:  syntax error, unexpected '$post' (T_VARIABLE) in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 113
+[14-Sep-2014 14:05:09 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 133
+[14-Sep-2014 14:11:37 America/Denver] PHP Parse error:  syntax error, unexpected ';' in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 179
+[20-Sep-2014 10:00:54 America/Denver] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 226
+[20-Sep-2014 10:00:56 America/Denver] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home7/teamflyc/public_html/teamflyc_webserver/fillprofile.php on line 226
+[22-Sep-2014 16:35:51 America/Denver] PHP Notice:  Undefined index: challenge_id in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 22
+[22-Sep-2014 16:35:51 America/Denver] PHP Notice:  Undefined variable: user_1 in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 34
+[22-Sep-2014 16:35:51 America/Denver] PHP Notice:  Undefined variable: user_2 in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 34
+[22-Sep-2014 16:35:51 America/Denver] PHP Notice:  Undefined variable: image_id in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 34
+[22-Sep-2014 16:36:01 America/Denver] PHP Parse error:  syntax error, unexpected '||' (T_BOOLEAN_OR), expecting ')' in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 7
+[22-Sep-2014 16:39:34 America/Denver] PHP Parse error:  syntax error, unexpected '||' (T_BOOLEAN_OR), expecting ')' in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 7
+[22-Sep-2014 16:40:40 America/Denver] PHP Parse error:  syntax error, unexpected '||' (T_BOOLEAN_OR), expecting ')' in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 7
+[22-Sep-2014 16:41:30 America/Denver] PHP Parse error:  syntax error, unexpected '||' (T_BOOLEAN_OR), expecting ')' in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 7
+[22-Sep-2014 16:48:28 America/Denver] PHP Parse error:  syntax error, unexpected '||' (T_BOOLEAN_OR), expecting ')' in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 7
+[22-Sep-2014 16:56:17 America/Denver] PHP Parse error:  syntax error, unexpected '||' (T_BOOLEAN_OR), expecting ')' in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 7
+[22-Sep-2014 17:06:58 America/Denver] PHP Parse error:  syntax error, unexpected '||' (T_BOOLEAN_OR), expecting ')' in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 7
+[22-Sep-2014 17:07:33 America/Denver] PHP Parse error:  syntax error, unexpected '||' (T_BOOLEAN_OR), expecting ')' in /home7/teamflyc/public_html/teamflyc_webserver/updatechallengesettings.php on line 7

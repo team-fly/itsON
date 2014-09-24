@@ -20,5 +20,6 @@
     <string name="title_activity_activity_archive">ActivityArchive</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_profile_settings">Profile</string>
+    <string name="title_activity_activity_challenge_settings">ActivityChallengeSettings</string>
 
 </resources>

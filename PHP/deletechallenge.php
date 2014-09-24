@@ -40,7 +40,7 @@ if (!empty($_POST)) {
 ?>
     <h1>Delete Challenge</h1>
     <form action="deletechallenge.php" method="post">
-	User ID:<br />
+	Challenge ID:<br />
 			<input type="text" name="challenge_id" value="" />
         <br />
 	

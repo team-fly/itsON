@@ -1,6 +1,7 @@
 package flyapp.its_on;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -42,6 +43,8 @@ public class ProfileSettings extends Activity {
     private static int userId;
 
     private static UserSession userSession;
+
+    private ProgressDialog progressDialog;      //dialog used to show task is running
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -129,6 +132,9 @@ public class ProfileSettings extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            progressDialog = ProgressDialog.show(ProfileSettings.this,"Loading...",
+                    "Loading Page", false, false);
         }
 
         @Override
@@ -186,6 +192,8 @@ public class ProfileSettings extends Activity {
                 finish();
                 startActivity(nextScreen);
             }
+
+            progressDialog.dismiss();
         }
     }
 }

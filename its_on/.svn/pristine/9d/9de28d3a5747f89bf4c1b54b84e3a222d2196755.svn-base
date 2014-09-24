@@ -1,0 +1,168 @@
+package flyapp.its_on;
+
+import android.widget.EditText;
+import android.widget.RadioButton;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+
+/**
+ * Created by HLiu on 14/09/2014.
+ */
+public class DateHandler {
+
+    private DateTime startDate, endDate;
+    private final static DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
+    private static final String PHPTAG_DATE = "date";
+    private static final String PHPTAG_MSG = "message";
+
+    class UpdateParcel{
+        DateTime date;
+        boolean iscomp;
+        boolean ishead;
+        String message;
+    }
+
+    private List<String> completeDatesList=new ArrayList<String>();
+    private HashSet<String> fullDatesHash=new HashSet<String>();
+    private HashMap<String, String> updatedDatesHash;
+
+    private List<UpdateParcel> updateParcelList=new ArrayList<UpdateParcel>();
+
+    public DateHandler(String startDateString, String endDateString, String weekdays, JSONArray updates) {
+        // Parsing the date
+        startDate = dtf.parseDateTime(startDateString);
+        endDate = dtf.parseDateTime(endDateString);
+
+        char[] weekdaysArray=weekdays.toCharArray();
+
+        HashSet<Integer> weekdaysHash=new HashSet<Integer>();
+
+
+        for(int i=0; i<7; i++) {
+            if (weekdaysArray[i] == '1') {
+                weekdaysHash.add(i + 1);
+            }
+        }
+
+        while(!startDate.isAfter(endDate)){
+            if(weekdaysHash.contains(startDate.getDayOfWeek())){
+                completeDatesList.add(dtf.print(startDate));
+                fullDatesHash.add(dtf.print(startDate)); //for checking later on if its completed
+            }
+            startDate=startDate.plusDays(1);
+        }
+
+        convertJsonToUpdateParcel(updates);
+    }
+
+    public List<UpdateParcel> getUpdateParcelList(){
+        return updateParcelList;
+    }
+
+
+    private void convertJsonToUpdateParcel(JSONArray json){
+
+        updatedDatesHash=new HashMap<String, String>();
+        if (json != null) {
+            for (int i = 0; i < json.length(); i++) {
+                try {
+                    JSONObject c = json.getJSONObject(i);
+                    String date=c.getString(PHPTAG_DATE);
+                    String message=c.getString(PHPTAG_MSG);
+
+                    if(date!=null){
+                        updatedDatesHash.put(date, message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        updateParcelList=new ArrayList<UpdateParcel>();
+
+        for(int i=0; i<completeDatesList.size(); i++)
+        {
+            UpdateParcel updateParcel;
+            String s=completeDatesList.get(i);
+            if(updatedDatesHash.containsKey(s)){
+                updateParcel=createUpdateParcel(s, 1,updatedDatesHash.get(s));
+            }else{
+                updateParcel=createUpdateParcel(s, 0,updatedDatesHash.get(s));
+            }
+
+            if(i==0){
+                updateParcel.ishead=true;
+            }
+
+            updateParcelList.add(updateParcel);
+        }
+    }
+
+    public boolean checkIfUpdatable(){
+        LocalDate localDate = new LocalDate();
+        String localDateString=dtf.print(localDate);
+
+        if(fullDatesHash.contains(localDateString)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkIfUpdated(){
+        LocalDate localDate = new LocalDate();
+        String s=dtf.print(localDate);
+
+        if(fullDatesHash.contains(s) && updatedDatesHash.containsKey(s)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public UpdateParcel createUpdateParcel(String dateString, int iscomplete, String message)
+    {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        DateTime datetime=null;
+
+        try {
+            date = format.parse(dateString);
+            datetime = new DateTime(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        UpdateParcel updateParcel;
+
+        updateParcel=new UpdateParcel();
+        updateParcel.date=datetime;
+        updateParcel.message=message;
+
+        if(iscomplete==1) {
+            updateParcel.iscomp = true;
+        }
+        else {
+            updateParcel.iscomp = false;
+        }
+
+        if(datetime.getMonthOfYear()!=datetime.minusDays(1).getMonthOfYear())
+            updateParcel.ishead=true;
+
+        return updateParcel;
+    }
+
+
+}
